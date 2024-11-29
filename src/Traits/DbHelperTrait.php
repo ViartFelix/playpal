@@ -33,4 +33,14 @@ trait DbHelperTrait
             ->orderBy('RAND()')
             ->setMaxResults(1);
     }
+
+    /**
+     * Returns true if the entity exists in the database
+     * @return void
+     */
+    public function entityExists(object|int $entity)
+    {
+//        $trueId = is_object($entity)
+//            ? $entity->
+    }
 }
