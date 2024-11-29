@@ -6,9 +6,10 @@ use App\Entity\Event;
 use App\Repository\EventRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route("/events")]
+#[Route("/events", name: "events.")]
 class EventController extends AbstractController
 {
     private EventRepository $eventRepository;
@@ -25,7 +26,7 @@ class EventController extends AbstractController
      * Lists all available events
      * @return JsonResponse
      */
-    #[Route("/", name: "events.all")]
+    #[Route("/", name: "all")]
     public function listEvents(): JsonResponse
     {
         $allEvents = $this->eventRepository->findAll();
@@ -34,16 +35,18 @@ class EventController extends AbstractController
 
     /**
      * Returns the details for an event with a list of it's participants
-     * @param int $id
+     * @param int|Event $id
      * @return JsonResponse
      */
-    #[Route("/{id}", name: "events.single", requirements: [
+    #[Route("/{id}", name: "single", requirements: [
         "id" => '\d+'
     ])]
-    public function viewEvent(int $id): JsonResponse
+    public function viewEvent(int|Event $id): JsonResponse
     {
         /** @var Event|null $targetEvent */
-        $event = $this->eventRepository->find($id);
+        $event = is_int($id)
+            ? $this->eventRepository->find($id)
+            : $id;
 
         if(is_null($event)) {
             throw $this->createNotFoundException(
@@ -57,5 +60,23 @@ class EventController extends AbstractController
             "event" => $event,
             "participants" => $eventParticipants
         ]);
+    }
+
+    /**
+     * Adds a participant to an event. This request is forwarded to ParticipantController::addParticipant()
+     * @see ParticipantController::addParticipant()
+     * @param int|Event $event
+     * @return Response
+     *
+     */
+    #[Route("/{event}/participants/add", name: "participant.add", requirements: [
+        "event" => '\d+'
+    ])]
+    public function addParticipant(int|Event $event): Response
+    {
+        return $this->forward(
+            ParticipantController::class . "::addParticipant",
+            ["id" => $event]
+        );
     }
 }
