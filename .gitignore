@@ -8,3 +8,7 @@
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
+
+###> viart-felix/custom ###
+.idea
+###< viart-felix/custom ###
