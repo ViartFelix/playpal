@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: EventRepository::class)]
 class Event
@@ -17,22 +18,45 @@ class Event
     private ?int $id = null;
 
     #[ORM\Column(length: 100)]
+    #[Assert\NotBlank(message: "The name for the event cannot be empty.", allowNull: false)]
+    #[Assert\Length(
+        min: 3,
+        max: 100,
+        minMessage: "The name for the event cannot have less than {{ limit }} characters.",
+        maxMessage: "The name for the event cannot have more than {{ limit }} characters."
+    )]
     private ?string $name = null;
 
+    #[Assert\NotBlank(message: "The provided date cannot be empty.", allowNull: false)]
+    #[Assert\Date(message: "The provided date ({{value}}) is not a valid date.")]
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date = null;
-
-    #[ORM\Column]
-    private ?int $latitude = null;
-
-    #[ORM\Column]
-    private ?int $longitude = null;
 
     /**
      * @var Collection<int, Participant>
      */
     #[ORM\OneToMany(targetEntity: Participant::class, mappedBy: 'event')]
     private Collection $participants;
+
+    #[Assert\NotBlank(message: "The provided latitude cannot be empty.", allowNull: false)]
+    #[Assert\Range(
+        minMessage: "The provided latitude ({{value}}) cannot be lower than {{ limit }}.",
+        maxMessage: "The provided latitude ({{value}}) cannot be greater than {{ limit }}.",
+        min: -90,
+        max: 90,
+    )]
+    #[ORM\Column(type: Types::DECIMAL, precision: 9, scale: 7)]
+    private ?string $latitude = null;
+
+    #[Assert\NotBlank(message: "The provided longitude cannot be empty.", allowNull: false)]
+    #[Assert\Range(
+        minMessage: "The provided longitude ({{value}}) cannot be lower than {{ limit }}.",
+        maxMessage: "The provided longitude ({{value}}) cannot be greater than {{ limit }}.",
+        min: -180,
+        max: 180,
+    )]
+    #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 7)]
+    private ?string $longitude = null;
 
     public function __construct()
     {
@@ -68,30 +92,6 @@ class Event
         return $this;
     }
 
-    public function getLatitude(): ?int
-    {
-        return $this->latitude;
-    }
-
-    public function setLatitude(int $latitude): static
-    {
-        $this->latitude = $latitude;
-
-        return $this;
-    }
-
-    public function getLongitude(): ?int
-    {
-        return $this->longitude;
-    }
-
-    public function setLongitude(int $longitude): static
-    {
-        $this->longitude = $longitude;
-
-        return $this;
-    }
-
     /**
      * @return Collection<int, Participant>
      */
@@ -118,6 +118,30 @@ class Event
                 $participant->setEvent(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getLatitude(): ?string
+    {
+        return $this->latitude;
+    }
+
+    public function setLatitude(string $latitude): static
+    {
+        $this->latitude = $latitude;
+
+        return $this;
+    }
+
+    public function getLongitude(): ?string
+    {
+        return $this->longitude;
+    }
+
+    public function setLongitude(string $longitude): static
+    {
+        $this->longitude = $longitude;
 
         return $this;
     }
