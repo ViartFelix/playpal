@@ -1,0 +1,14 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+	<h1>New participant in event</h1>
+
+	<hr>
+
+	{{ form_start(form) }}
+		{{ form_row(form.name) }}
+		{{ form_row(form.email) }}
+		{{ form_row(form.event) }}
+	{{ form_end(form) }}
+
+{% endblock %}
