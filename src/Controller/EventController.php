@@ -44,7 +44,7 @@ class EventController extends AbstractController
     #[Route("/{id}", name: "single", requirements: [
         "id" => '\d+'
     ])]
-    public function viewEvent(int|Event $id): JsonResponse
+    public function viewEvent(int|Event $id): Response
     {
         /** @var Event|null $targetEvent */
         $event = is_int($id)
@@ -59,10 +59,10 @@ class EventController extends AbstractController
 
         $eventParticipants = $event->getParticipants();
 
-        return $this->json([
-            "event" => $event,
-            "participants" => $eventParticipants
-        ]);
+		return $this->render("events/view.html.twig", [
+			"event" => $event,
+			"participants" => $eventParticipants
+		]);
     }
 
     /**

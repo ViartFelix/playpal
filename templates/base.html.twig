@@ -7,6 +7,18 @@
         {% block css %}
         {% endblock %}
 
+		<style>
+			table {
+				--border: 1px solid black;
+				border: var(--border);
+				border-collapse: collapse;
+			}
+
+			td, th {
+				border: var(--border);
+			}
+		</style>
+
         {% block js %}
         {% endblock %}
     </head>
