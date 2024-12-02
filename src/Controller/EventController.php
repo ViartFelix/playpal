@@ -23,14 +23,17 @@ class EventController extends AbstractController
 
 
     /**
-     * Lists all available events
-     * @return JsonResponse
+     * Lists all available events.
+     * @return Response
      */
     #[Route("/", name: "all")]
-    public function listEvents(): JsonResponse
+    public function listEvents(): Response
     {
         $allEvents = $this->eventRepository->findAll();
-        return $this->json($allEvents);
+
+        return $this->render("events/list.html.twig", [
+            "allEvents" => $allEvents
+        ]);
     }
 
     /**

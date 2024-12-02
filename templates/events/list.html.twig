@@ -1,0 +1,49 @@
+{% extends "base.html.twig" %}
+
+{% block css %}
+	<style>
+		table {
+			--border: 1px solid black;
+			border: var(--border);
+			border-collapse: collapse;
+		}
+
+		td, th {
+			border: var(--border);
+		}
+	</style>
+{% endblock %}
+
+{% block body %}
+    <h1>All sport events</h1>
+
+    {% if allEvents %}
+        <table>
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Date</th>
+                <th>Latitude</th>
+                <th>Longitude</th>
+            </tr>
+            </thead>
+
+            <tbody>
+                {% for event in allEvents %}
+                    <tr>
+						<td>{{ event.id }}</td>
+						<td>{{ event.name }}</td>
+						<td>{{ event.date|date('d/m/Y') }}</td>
+						<td>{{ event.latitude }}</td>
+						<td>{{ event.longitude }}</td>
+					</tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+
+    {% else %}
+        <h2>No events</h2>
+    {% endif %}
+{% endblock %}
