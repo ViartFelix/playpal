@@ -4,9 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Repository\EventRepository;
+use App\Services\EventsService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route("/events", name: "events.")]
@@ -64,6 +67,44 @@ class EventController extends AbstractController
 			"participants" => $eventParticipants
 		]);
     }
+
+	/**
+	 * API Route to calculate the distance to an event.
+	 */
+	#[Route("/{event}/distance", name: "api.calculator", requirements: [
+		"event" => '\d+'
+	])]
+	public function calculateDistanceToEvent(Event $event, Request $request, EventsService $eventsService): JsonResponse
+	{
+		//first check if all params are present
+		$requestLatitude = $request->get("lat", null) ?? $request->get("latitude", null);
+		$requestLongitude = $request->get("lon", null) ?? $request->get("longitude", null);
+
+		$eventsService->checkLatitudeLongitude($requestLatitude, $requestLongitude);
+
+		$givenLatitude = (float) $requestLatitude;
+		$givenLongitude = (float) $requestLongitude;
+
+		$distance = $eventsService->calculateDistance(
+			$event->getLatitude(),
+			$event->getLongitude(),
+			$givenLatitude,
+			$givenLongitude
+		);
+
+		//additional data
+		$bonusData = $eventsService->getMetricConversions(
+			$distance, $request->get("digits", null)
+		);
+
+		return $this->json([
+			"message" => "Distance has been calculated.",
+			"distance" => $distance,
+			"bonus" => $bonusData
+		], 200);
+	}
+
+
 
     /**
      * Adds a participant to an event. This request is forwarded to ParticipantController::addParticipant()

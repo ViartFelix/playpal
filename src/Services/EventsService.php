@@ -2,20 +2,30 @@
 
 namespace App\Services;
 
-class EventsService
+use App\interfaces\EventsServiceInterface;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
+class EventsService implements EventsServiceInterface
 {
 	/** @var float Earth's radius in Km */
 	private static float $earthRadius = 6378.0;
 
-	/**
-	 * Calculates the distance between two points on earth using the Haversine formula. <br/>
-	 * **Caution**: The latitudes and longitudes must be in degrees.
-	 * @param float|int $latOne
-	 * @param float|int $lonOne
-	 * @param float|int $latTwo
-	 * @param float|int $lonTwo
-	 * @return float
-	 */
+	private static float $maxLatitude = 90.0;
+
+	private static float $minLatitude = -90.0;
+
+	private static float $maxLongitude = 180.0;
+
+	private static float $minLongitude = -180.0;
+
+	private MetricService $metricService;
+
+	public function __construct(?MetricService $metricService = null)
+	{
+		$this->metricService = $metricService ?? new MetricService();
+	}
+
 	public function calculateDistance(float|int $latOne, float|int $lonOne, float|int $latTwo, float|int $lonTwo): float
 	{
 		$latitudeOneRad = deg2rad($latOne);
@@ -78,5 +88,127 @@ class EventsService
 	protected function angularDistanceToLinear(float $angularDistance): float
 	{
 		return $angularDistance * self::$earthRadius;
+	}
+
+	public function checkLatitudeLongitude(int|string|null $requestLatitude, int|string|null $requestLongitude): static
+	{
+		//first check if all required params are present
+		if(is_null($requestLatitude) || is_null($requestLongitude)) {
+
+			//get the param (lat or lon) that makes this request unprocessable
+			$requestMissingParam = is_null($requestLatitude)
+				? "latitude"
+				: "longitude";
+
+			throw new BadRequestHttpException(
+				sprintf("The %s is missing from the GET parameters.", $requestMissingParam)
+			);
+		}
+
+		//we check if the params are numbers
+		if(!is_numeric($requestLatitude) || !is_numeric($requestLongitude)) {
+
+			//get the param (lat or lon) that makes this request unprocessable
+			$requestNonNumericParam = !is_numeric($requestLatitude)
+				? "latitude"
+				: "longitude";
+
+			throw new BadRequestException(
+				sprintf("The provided %s is not a number.", $requestNonNumericParam)
+			);
+		}
+
+		//finally, we check if the latitude and longitude are in the right ranges
+		$longitude = (float) $requestLongitude;
+		$latitude = (float) $requestLatitude;
+
+		$isLatitudeInRange = $this->isLatitudeInRange($latitude);
+		$isLongitudeInRange = $this->isLongitudeInRange($longitude);
+
+		if(!$isLatitudeInRange || !$isLongitudeInRange) {
+			//what coordinate (lat or lon) make the request unprocessable
+			$requestNonInRangeParam = "";
+			$requestGivenParam = "";
+
+			//min and max of the coordinate
+			$requestParamMinRange = "";
+			$requestParamMaxRange = "";
+
+			if(!$isLatitudeInRange) {
+				$requestNonInRangeParam = "latitude";
+				$requestGivenParam = $requestLatitude;
+				$requestParamMinRange = self::$minLatitude;
+				$requestParamMaxRange = self::$maxLatitude;
+			} else {
+				$requestNonInRangeParam = "longitude";
+				$requestGivenParam = $requestLongitude;
+				$requestParamMinRange = self::$minLongitude;
+				$requestParamMaxRange = self::$maxLongitude;
+			}
+
+			throw new BadRequestException(
+				sprintf(
+					"The provided %s ('%s') is not in the correct range: %s to %s.",
+					$requestNonInRangeParam, $requestGivenParam, $requestParamMinRange, $requestParamMaxRange
+				)
+			);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * Returns true if the provided latitude is in range or false otherwise
+	 * @param float|int $latitude
+	 * @return bool
+	 */
+	protected function isLatitudeInRange(float|int $latitude): bool
+	{
+		return self::$minLatitude <= $latitude && $latitude <= self::$maxLatitude;
+	}
+
+	/**
+	 * Returns true if the provided longitude is in range or false otherwise
+	 * @param float|int $longitude
+	 * @return bool
+	 */
+	protected function isLongitudeInRange(float|int $longitude): bool
+	{
+		return self::$minLongitude <= $longitude && $longitude <= self::$maxLongitude;
+	}
+
+
+	public function getMetricConversions(int|float $value, ?int $roundedAt = null): array
+	{
+		//convert the value; it'll be simpler later
+		$floatValue = (float) $value;
+
+		//default round to
+		$roundedAt ??= 9;
+		$this->metricService->setDefaultRoundTo($roundedAt);
+
+		$metricResults = [
+			"km" => $floatValue,
+			"m" => $this->metricService->toMeters($floatValue),
+			"cm" => $this->metricService->toCentimeters($floatValue),
+		];
+
+		$imperialResults = [
+			"miles" => $this->metricService->toMiles($floatValue),
+			"feets" => $this->metricService->toFeet($floatValue)
+		];
+
+		$otherUnits = [
+			"ly" => $this->metricService->toLightYears($floatValue),
+			"hot_dogs" => $this->metricService->toHotDogs($floatValue),
+			"bernese_mountain_dogs" => $this->metricService->toBerneseMountainDogs($floatValue),
+		];
+
+		return [
+			"metric" => $metricResults,
+			"imperial" => $imperialResults,
+			"other" => $otherUnits,
+			"clean" => $this->metricService->getAdaptedUnits($floatValue)
+		];
 	}
 }
