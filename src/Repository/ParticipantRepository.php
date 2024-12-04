@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Event;
 use App\Entity\Participant;
 use App\Traits\DbHelperTrait;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -19,28 +20,57 @@ class ParticipantRepository extends ServiceEntityRepository
         parent::__construct($registry, Participant::class);
     }
 
-    //    /**
-    //     * @return Participant[] Returns an array of Participant objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('p.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
+	public function isParticipantEmailAvailable(Participant $participant): bool
+	{
+		/** @var Event $targetEvent */
+		$targetEvent = $participant->getEvent();
+		$allEventParticipants = $targetEvent->getParticipants();
 
-    //    public function findOneBySomeField($value): ?Participant
-    //    {
-    //        return $this->createQueryBuilder('p')
-    //            ->andWhere('p.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
+		foreach ($allEventParticipants as $eventParticipant) {
+			if($eventParticipant->getEmail() === $participant->getEmail()) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public function isParticipantNameAvailable(Participant $participant): bool
+	{
+		/** @var Event $targetEvent */
+		$targetEvent = $participant->getEvent();
+		$allEventParticipants = $targetEvent->getParticipants();
+
+		foreach ($allEventParticipants as $eventParticipant) {
+			if($eventParticipant->getName() === $participant->getName()) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Returns true if the participant is not already registered to an event.
+	 * Checks if the mail or the name are took present from the participants
+	 * @param Participant $participant
+	 * @return bool
+	 */
+	public function isParticipantRegistered(Participant $participant): bool
+	{
+		/** @var Event $targetEvent */
+	   $targetEvent = $participant->getEvent();
+	   $allEventParticipants = $targetEvent->getParticipants();
+
+	   foreach ($allEventParticipants as $eventParticipant) {
+		   $isNameTaken = $eventParticipant->getName() === $participant->getName();
+		   $isMailTaken = $eventParticipant->getEmail() === $participant->getEmail();
+
+		   if($isNameTaken || $isMailTaken) {
+			   return false;
+		   }
+	   }
+
+	   return true;
+	}
 }
