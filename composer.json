@@ -1,7 +1,7 @@
 {
     "type": "project",
     "name": "viart-felix/playpal",
-    "version": "0.2.4",
+    "version": "0.2.5",
     "license": "proprietary",
     "minimum-stability": "stable",
     "prefer-stable": true,
@@ -27,7 +27,9 @@
         "beberlei/doctrineextensions": "^1.5",
         "doctrine/doctrine-fixtures-bundle": "^3.7",
         "fakerphp/faker": "^1.24",
-        "symfony/maker-bundle": "^1.61"
+        "symfony/maker-bundle": "^1.61",
+        "symfony/stopwatch": "7.1.*",
+        "symfony/web-profiler-bundle": "7.1.*"
     },
     "config": {
         "allow-plugins": {

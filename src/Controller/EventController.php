@@ -3,25 +3,34 @@
 namespace App\Controller;
 
 use App\Entity\Event;
+use App\Form\CreateNewEventType;
 use App\Repository\EventRepository;
 use App\Services\EventsService;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Exception\ORMException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[Route("/events", name: "events.")]
 class EventController extends AbstractController
 {
     private EventRepository $eventRepository;
+	private EntityManagerInterface $entityManager;
 
     public function __construct(
-        EventRepository $eventRepository
-    )
-    {
+        EventRepository $eventRepository,
+		EntityManagerInterface $entityManager
+    ) {
         $this->eventRepository = $eventRepository;
+		$this->entityManager = $entityManager;
     }
 
 
@@ -69,6 +78,69 @@ class EventController extends AbstractController
     }
 
 	/**
+	 * Route to a new event
+	 * @return void
+	 * @throws ORMException
+	 */
+	#[Route("/new", name: "new")]
+	public function newEvent(Request $request): Response
+	{
+		$event = new Event();
+
+		$form = $this->createForm(CreateNewEventType::class, $event);
+		$form->handleRequest($request);
+
+		if($form->isSubmitted() && $form->isValid()) {
+			/** @var Event $formEvent */
+			$formEvent = $form->getData();
+
+			$now = (new \DateTimeImmutable())->setTime(0,0,0,0);
+			$formDate = $formEvent->getDate()->setTime(0,0,0,0);
+
+			//if event's date before today
+			if($now > $formDate) {
+				$form->get("date")->addError(
+					new FormError("The date must not be before today.")
+				);
+
+				//re-render the form with the errors
+				return $this->renderNewEventForm($form);
+			} else {
+				//else the event is valid
+				$this->entityManager->persist($formEvent);
+				$this->entityManager->flush();
+
+				$this->addFlash("success", sprintf(
+					"The event '%s' has been created for the date %s",
+					$formEvent->getName(), $formEvent->getDate()->format('d/m/Y')
+				));
+
+				return $this->redirectToRoute("events.single", ["id" => $event->getId()]);
+			}
+		}
+
+		return $this->renderNewEventForm($form);
+	}
+
+	/**
+	 * Returns a render of the new event form
+	 * @param FormInterface $form The "CreateNewEventType" form
+	 * @return Response
+	 */
+	private function renderNewEventForm(FormInterface $form): Response
+	{
+		if(!$form instanceof CreateNewEventType) {
+			throw new HttpException(500, "The provided form is not the correct one.");
+		}
+
+		/** @var FormInterface $form */
+
+		return $this->render("events/new.html.twig", [
+			"form" => $form->createView()
+		]);
+	}
+
+	/**
 	 * API Route to calculate the distance to an event.
 	 */
 	#[Route("/{event}/distance", name: "api.calculator", requirements: [
@@ -103,8 +175,6 @@ class EventController extends AbstractController
 			"bonus" => $bonusData
 		], 200);
 	}
-
-
 
     /**
      * Adds a participant to an event. This request is forwarded to ParticipantController::addParticipant()

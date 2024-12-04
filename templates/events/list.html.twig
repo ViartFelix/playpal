@@ -24,12 +24,11 @@
 						<td>{{ event.date|date('d/m/Y') }}</td>
 						<td>{{ event.latitude }}</td>
 						<td>{{ event.longitude }}</td>
-						<td><a href="{{ path('events.single', {id: event.id}) }}">Voir</a></td>
+						<td><a href="{{ path('events.single', {id: event.id}) }}">See</a></td>
 					</tr>
                 {% endfor %}
             </tbody>
         </table>
-
 
     {% else %}
         <h2>No events</h2>

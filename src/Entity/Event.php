@@ -28,7 +28,7 @@ class Event
     private ?string $name = null;
 
     #[Assert\NotBlank(message: "The provided date cannot be empty.", allowNull: false)]
-    #[Assert\Date(message: "The provided date ({{value}}) is not a valid date.")]
+    #[Assert\Type(\DateTimeInterface::class, message: "The provided date ({{value}}) is not a valid date.")]
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date = null;
 
@@ -40,19 +40,17 @@ class Event
 
     #[Assert\NotBlank(message: "The provided latitude cannot be empty.", allowNull: false)]
     #[Assert\Range(
-        minMessage: "The provided latitude ({{value}}) cannot be lower than {{ limit }}.",
-        maxMessage: "The provided latitude ({{value}}) cannot be greater than {{ limit }}.",
-        min: -90,
-        max: 90,
+        notInRangeMessage: "The provided latitude ({{ value }}) must be between {{ min }} and {{ max }}.",
+		min: -90,
+		max: 90
     )]
     #[ORM\Column(type: Types::DECIMAL, precision: 9, scale: 7)]
     private ?string $latitude = null;
 
     #[Assert\NotBlank(message: "The provided longitude cannot be empty.", allowNull: false)]
     #[Assert\Range(
-        minMessage: "The provided longitude ({{value}}) cannot be lower than {{ limit }}.",
-        maxMessage: "The provided longitude ({{value}}) cannot be greater than {{ limit }}.",
-        min: -180,
+		notInRangeMessage: "The provided longitude ({{ value }}) must be between {{ min }} and {{ max }}.",
+		min: -180,
         max: 180,
     )]
     #[ORM\Column(type: Types::DECIMAL, precision: 10, scale: 7)]
