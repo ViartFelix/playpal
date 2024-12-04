@@ -129,12 +129,6 @@ class EventController extends AbstractController
 	 */
 	private function renderNewEventForm(FormInterface $form): Response
 	{
-		if(!$form instanceof CreateNewEventType) {
-			throw new HttpException(500, "The provided form is not the correct one.");
-		}
-
-		/** @var FormInterface $form */
-
 		return $this->render("events/new.html.twig", [
 			"form" => $form->createView()
 		]);
