@@ -7,6 +7,8 @@
         {% block css %}
         {% endblock %}
 
+		{{ encore_entry_link_tags('app') }}
+
 		<style>
 			table {
 				--border: 1px solid black;
@@ -21,6 +23,8 @@
 
         {% block js %}
         {% endblock %}
+
+		{{ encore_entry_script_tags('app') }}
     </head>
     <body>
         <nav>
