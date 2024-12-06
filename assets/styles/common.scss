@@ -17,7 +17,3 @@ html, body {
 	position: relative;
 }
 
-//every element except the symfony toolbar
-*:not(.sf-toolbar):not(.sf-toolbar *) {
-	font-family: "Kanit", sans-serif;
-}
