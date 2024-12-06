@@ -19,7 +19,8 @@
         "watch": "encore dev --watch",
         "build": "encore production --progress"
     },
-	"dependencies": {
-		"iconify-icon": "^2.1.0"
-	}
+    "dependencies": {
+        "bulma": "^1.0.2",
+        "iconify-icon": "^2.1.0"
+    }
 }

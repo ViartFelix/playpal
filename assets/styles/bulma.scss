@@ -1,0 +1,10 @@
+@use "colors" as *;
+
+@use "bulma/sass" with (
+	$primary: $blue,
+	$link: $blue,
+	$danger: $red,
+	$navbar-background-color: $dark,
+	$navbar-item-color: $yellow,
+	$black: $dark,
+);
