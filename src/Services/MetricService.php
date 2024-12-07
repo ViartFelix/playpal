@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use App\interfaces\MetricServiceConstants;
-use App\interfaces\Roundable;
+use App\Interfaces\MetricServiceConstants;
+use App\Interfaces\Roundable;
 
 class MetricService implements MetricServiceConstants, Roundable
 {

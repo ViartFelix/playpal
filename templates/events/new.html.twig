@@ -1,16 +1,107 @@
 {% extends "base.html.twig" %}
 
+{% set title = "New event" %}
+
 {% block body %}
-<h1>New event</h1>
+	<section class="section">
+		<div class="container">
+			{{ form_start(form) }}
 
-	{{ form_start(form) }}
-		{{ form_row(form.name) }}
-		{{ form_row(form.date) }}
-		{{ form_row(form.latitude) }}
-		{{ form_row(form.longitude) }}
+			<div class="columns">
 
-		<button type="submit">
-			Submit
-		</button>
-	{{ form_end(form) }}
+				<!-- Input for name -->
+				<div class="field is-small column">
+					<label class="label">{{ form_label(form.name) }}</label>
+
+					<div class="control has-icons-left is-small">
+						<span class="icon is-left">
+							<iconify-icon icon="mdi:people"></iconify-icon>
+						</span>
+						{{ form_widget(form.name) }}
+					</div>
+
+					{% for error in form.name.vars.errors %}
+						<div class="help message is-danger">
+							<p class="message-body">{{ error.message }}</p>
+						</div>
+					{% endfor %}
+				</div>
+
+				<!-- Input for the date -->
+				<div class="field is-small column">
+					<label class="label">{{ form_label(form.date) }}</label>
+
+					<div class="control has-icons-left is-small">
+						<span class="icon is-left">
+							<iconify-icon icon="mdi:calendar"></iconify-icon>
+						</span>
+						{{ form_widget(form.date) }}
+					</div>
+
+					{% for error in form.date.vars.errors %}
+						<div class="help message is-danger">
+							<p class="message-body">{{ error.message }}</p>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+
+			<div class="columns">
+
+				<!-- Input for latitude -->
+				<div class="field is-small column">
+					<label class="label">{{ form_label(form.latitude) }}</label>
+
+					<div class="control has-icons-left is-small">
+						<span class="icon is-left">
+							<iconify-icon icon="mdi:latitude"></iconify-icon>
+						</span>
+						{{ form_widget(form.latitude) }}
+					</div>
+
+					{% for error in form.latitude.vars.errors %}
+						<div class="help message is-danger">
+							<p class="message-body">{{ error.message }}</p>
+						</div>
+					{% endfor %}
+				</div>
+
+				<!-- Input for longitude -->
+				<div class="field is-small column">
+					<label class="label">{{ form_label(form.longitude) }}</label>
+
+					<div class="control has-icons-left is-small">
+						<span class="icon is-left">
+							<iconify-icon icon="mdi:longitude"></iconify-icon>
+						</span>
+						{{ form_widget(form.longitude) }}
+					</div>
+
+					{% for error in form.longitude.vars.errors %}
+						<div class="help message is-danger">
+							<p class="message-body">{{ error.message }}</p>
+						</div>
+					{% endfor %}
+				</div>
+			</div>
+
+			<div class="field is-grouped is-grouped-centered">
+				<div class="control">
+					<button class="button is-dark" type="submit">
+						Submit
+					</button>
+				</div>
+
+				<div class="control">
+					<button class="button is-outlined is-white" type="reset">
+						Reset
+					</button>
+				</div>
+			</div>
+
+			{{ form_end(form) }}
+		</div>
+	</section>
+
+
 {% endblock %}

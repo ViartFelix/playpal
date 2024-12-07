@@ -1,0 +1,24 @@
+{% macro render_banner(title, subtitle) %}
+	{% set rendered_title = title|default(null) %}
+	{% set rendered_subitle = subtitle|default(null) %}
+
+	{% if rendered_title is not empty or rendered_subitle is not empty %}
+		<section class="hero is-primary is-medium">
+			<div class="hero-body">
+				<div class="container">
+					{% if title is not empty %}
+						<p class="title has-text-centered">
+							{{ title }}
+						</p>
+					{% endif %}
+
+					{% if subtitle is not empty %}
+						<p class="subtitle is-italic has-text-centered">
+							{{ subtitle }}
+						</p>
+					{% endif %}
+				</div>
+			</div>
+		</section>
+	{% endif %}
+{% endmacro %}

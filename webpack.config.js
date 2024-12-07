@@ -53,7 +53,12 @@ Encore
     })
 
     // enables Sass/SCSS support
-    .enableSassLoader()
+    .enableSassLoader((options) => {
+		//bulma creates sass deprecation warning, and it's ugly tbh
+		options.sassOptions = {
+			quietDeps: true
+		}
+	})
 
     // uncomment if you use TypeScript
     //.enableTypeScriptLoader()
@@ -72,6 +77,9 @@ const allEntries = {
 	"app": [
 		"./assets/app.js",
 		"./assets/styles/common.scss"
+	],
+	"events-new": [
+		"./assets/pages/events/new.js"
 	]
 }
 

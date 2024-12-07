@@ -1,47 +1,59 @@
 {% extends "base.html.twig" %}
 
+{% set title = event.name|default(null) %}
+{% set subtitle = "Planned the " ~ event.date|date("d/m/Y") %}
+
+{% block js %}
+	{{ encore_entry_script_tags('events-new') }}
+{% endblock %}
+
 {% block body %}
-	<h1>{{ event.name }}</h1>
+	<section class="section">
+		<div class="container">
+			<h2 class="subtitle has-text-centered">
+				{% if participants is not empty %}
+					{{ participants|length }} participants.
+				{% else %}
+					No participants.
+				{% endif %}
+			</h2>
 
-	<hr>
-
-	<section>
-		<div>
-			<p>Name</p>
-			<p>{{ event.name }}</p>
+			{% if participants is not empty %}
+				<div class="fixed-grid has-3-cols">
+					<div class="grid">
+						{% for participant in participants %}
+							<div class="cell card is-overflow-hidden">
+								<div class="card-image">
+									<figure class="image">
+										<object
+											class="is-fullwidth image"
+											data="{{ random_icon(participant.email) }}"
+											type="image/png"
+										>
+											<!-- Fallback -->
+											<img
+												src="{{ asset('img/default-profile.png') }}"
+												alt="Image of {{ participant.name }}"
+												data-icon-on-error="mdi:error"
+											/>
+										</object>
+									</figure>
+								</div>
+								<div class="card-header">
+									<p class="card-header-title">{{ participant.name }}</p>
+								</div>
+								<div class="card-content">
+									<a class="link" href="mailto:{{ participant.email }}">
+										<iconify-icon icon="mdi:email" class="icon"></iconify-icon>
+										{{ participant.email }}
+									</a>
+								</div>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+			{% endif %}
 		</div>
-
-		<div>
-			<p>Date</p>
-			<p>{{ event.date|date("d/m/Y") }}</p>
-		</div>
-	</section>
-
-	<hr>
-
-	<section>
-		{% if participants is empty %}
-			<h2>No participants.</h2>
-		{% else %}
-			<h2>{{ participants|length }} Participants</h2>
-			<table>
-				<thead>
-				<tr>
-					<th>Name</th>
-					<th>Email</th>
-				</tr>
-				</thead>
-				<tbody>
-				{% for participant in participants %}
-					<tr>
-						<td>{{ participant.name }}</td>
-						<td>{{ participant.email }}</td>
-					</tr>
-				{% endfor %}
-				</tbody>
-			</table>
-		{% endif %}
-
 	</section>
 
 	<hr>

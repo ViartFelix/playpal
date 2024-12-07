@@ -1,0 +1,27 @@
+<header class="header">
+	<nav class="navbar is-position-sticky is-spaced" role="navigation">
+		<div class="navbar-start">
+			<a class="navbar-item" href="{{ path("home") }}">
+				<iconify-icon icon="mdi:home"></iconify-icon>
+				Home
+			</a>
+
+			<div class="navbar-item has-dropdown is-hoverable">
+				<a class="navbar-link" href="#">
+					Events
+				</a>
+
+				<div class="navbar-dropdown is-hoverable" aria-label="dropdown navigation">
+					<a class="navbar-item" href="{{ path("events.all") }}">
+						<iconify-icon icon="ic:baseline-sports-soccer"></iconify-icon>
+						List
+					</a>
+					<a class="navbar-item" href="{{ path("events.new") }}">
+						<iconify-icon icon="carbon:add-filled"></iconify-icon>
+						New event
+					</a>
+				</div>
+			</div>
+		</div>
+	</nav>
+</header>

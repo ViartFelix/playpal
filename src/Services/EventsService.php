@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\interfaces\EventsServiceInterface;
+use App\Interfaces\EventsServiceInterface;
 use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 

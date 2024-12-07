@@ -1,36 +1,56 @@
 {% extends "base.html.twig" %}
 
+{% set title = "All sport events" %}
+{% set subtitle = allEvents ? ('Found ' ~ allEvents|length ~ ' events.') : null %}
+
 {% block body %}
-    <h1>All sport events</h1>
+	<section class="section">
+		<div class="container content">
+			{% if allEvents %}
+				<table class="table is-hoverable is-striped is-fullwidth is-rounded is-narrow">
+					<thead>
+						<tr>
+							<th class="has-text-primary">ID</th>
+							<th class="has-text-primary">Name</th>
+							<th class="has-text-primary">Date</th>
+							<th class="has-text-primary"><abbr title="Latitude">Lat</abbr></th>
+							<th class="has-text-primary"><abbr title="Longitude">Lon</abbr></th>
+							<th class="has-text-primary">Action</th>
+						</tr>
+					</thead>
 
-    {% if allEvents %}
-        <table>
-            <thead>
-            <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Date</th>
-                <th>Latitude</th>
-                <th>Longitude</th>
-				<th>Action</th>
-            </tr>
-            </thead>
+					<tbody>
+					{% for event in allEvents %}
+						<tr class="is-vcentered">
+							<td>{{ event.id }}</td>
+							<td>{{ event.name }}</td>
+							<td>{{ event.date|date('d/m/Y') }}</td>
+							<td>{{ event.latitude }}</td>
+							<td>{{ event.longitude }}</td>
+							<td class="is-flex is-justify-content-center is-align-content-center">
+								<a class="is-link icon is-bordered" href="{{ path('events.single', {id: event.id}) }}">
+									<iconify-icon title="See" icon="mdi:eye"></iconify-icon>
+								</a>
+							</td>
+						</tr>
+					{% endfor %}
+					</tbody>
+				</table>
+			{% else %}
+				<p class="title has-text-centered has-text-black">
+					No events.
+				</p>
 
-            <tbody>
-                {% for event in allEvents %}
-                    <tr>
-						<td>{{ event.id }}</td>
-						<td>{{ event.name }}</td>
-						<td>{{ event.date|date('d/m/Y') }}</td>
-						<td>{{ event.latitude }}</td>
-						<td>{{ event.longitude }}</td>
-						<td><a href="{{ path('events.single', {id: event.id}) }}">See</a></td>
-					</tr>
-                {% endfor %}
-            </tbody>
-        </table>
+				<div class="is-flex is-justify-content-center">
+					<a class="button is-centered has-text-white has-background-dark" href="{{ path("events.new") }}">
+						<span class="icon">
+							<iconify-icon icon="mdi:plus"></iconify-icon>
+						</span>
 
-    {% else %}
-        <h2>No events</h2>
-    {% endif %}
+						<span>Create a new event</span>
+					</a>
+				</div>
+			{% endif %}
+		</div>
+	</section>
 {% endblock %}
