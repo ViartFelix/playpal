@@ -79,7 +79,7 @@ class ParticipantController extends AbstractController
 					$form->get("email")->addError(new FormError("This email is already taken."));
 				}
 
-				return $this->renderAddParticipantForm($form);
+				return $this->renderAddParticipantForm($form, $event);
 			} else {
 				$this->entityManager->persist($formParticipant);
 				$this->entityManager->flush();
@@ -93,18 +93,20 @@ class ParticipantController extends AbstractController
 			}
 		}
 
-        return $this->renderAddParticipantForm($form);
+        return $this->renderAddParticipantForm($form, $event);
     }
 
 	/**
 	 * Returns a render of the new participant to an event form
 	 * @param FormInterface $form The "AddParticipantToEventType" form
+	 * @param Event $event The target event
 	 * @return Response
 	 */
-	private function renderAddParticipantForm(FormInterface $form): Response
+	private function renderAddParticipantForm(FormInterface $form, Event $event): Response
 	{
 		return $this->render("participant/new.html.twig", [
-			"form" => $form->createView()
+			"form" => $form->createView(),
+			"event" => $event
 		]);
 	}
 }

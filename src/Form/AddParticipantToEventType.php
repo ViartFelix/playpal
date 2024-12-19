@@ -15,15 +15,27 @@ class AddParticipantToEventType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('name')
-            ->add('email')
+            ->add('name', null, [
+				"label" => "Participant's name",
+				"attr" => [
+					"class" => "input",
+					"placeholder" => "John Doe"
+				],
+			])
+            ->add('email', null, [
+				"label" => "Participant's email",
+				"attr" => [
+					"class" => "input",
+					"placeholder" => "john.doe@exemple.com",
+					"type" => "email"
+				],
+			])
             ->add('event', EntityType::class, [
                 'class' => Event::class,
                 'choice_label' => 'name',
+				"label" => "Event",
             ])
-			->add("save", SubmitType::class, [
-				"label" => "OK"
-			])
+			->setAttribute("class", "form")
         ;
     }
 

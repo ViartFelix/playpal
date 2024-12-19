@@ -1,14 +1,96 @@
 {% extends "base.html.twig" %}
 
+{% set title = "Add a participant" %}
+{% set subtitle = "Event '" ~ event.name ~ "'" %}
+
 {% block body %}
-	<h1>New participant in event</h1>
+	<section class="section">
+		<div class="container">
+			{{ form_start(form) }}
 
-	<hr>
+				<div class="columns">
+					<!-- Input for name -->
+					<div class="field is-small column">
+						<label class="label">{{ form_label(form.name) }}</label>
 
+						<div class="control has-icons-left is-small">
+							<span class="icon is-left">
+								<iconify-icon icon="mdi:people"></iconify-icon>
+							</span>
+							{{ form_widget(form.name) }}
+						</div>
+
+						{% for error in form.name.vars.errors %}
+							<div class="help message is-danger">
+								<p class="message-body">{{ error.message }}</p>
+							</div>
+						{% endfor %}
+					</div>
+
+					<!-- Input for the email -->
+					<div class="field is-small column">
+						<label class="label">{{ form_label(form.email) }}</label>
+
+						<div class="control has-icons-left is-small">
+							<span class="icon is-left">
+								<iconify-icon icon="mdi:alternate-email"></iconify-icon>
+							</span>
+							{{ form_widget(form.email) }}
+						</div>
+
+						{% for error in form.email.vars.errors %}
+							<div class="help message is-danger">
+								<p class="message-body">{{ error.message }}</p>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+
+				<div class="columns">
+					<!-- Input for the event -->
+					<div class="field is-small column">
+						<label class="label">{{ form_label(form.event) }}</label>
+
+						<div class="control has-icons-left is-small">
+							<iconify-icon class="icon is-small is-left" icon="mdi:football"></iconify-icon>
+
+							<div class="select">
+								{{ form_widget(form.event) }}
+							</div>
+						</div>
+
+						{% for error in form.event.vars.errors %}
+							<div class="help message is-danger">
+								<p class="message-body">{{ error.message }}</p>
+							</div>
+						{% endfor %}
+					</div>
+				</div>
+
+				<div class="field is-grouped is-grouped-centered">
+					<div class="control">
+						<button class="button is-dark" type="submit">
+							Submit
+						</button>
+					</div>
+
+					<div class="control">
+						<button class="button is-outlined is-white" type="reset">
+							Reset
+						</button>
+					</div>
+				</div>
+
+			{{ form_end(form) }}
+		</div>
+	</section>
+
+	{#
 	{{ form_start(form) }}
 		{{ form_row(form.name) }}
 		{{ form_row(form.email) }}
 		{{ form_row(form.event) }}
 	{{ form_end(form) }}
+	#}
 
 {% endblock %}
