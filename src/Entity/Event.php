@@ -29,6 +29,7 @@ class Event
 
     #[Assert\NotBlank(message: "The provided date cannot be empty.", allowNull: false)]
     #[Assert\Type(\DateTimeInterface::class, message: "The provided date ({{value}}) is not a valid date.")]
+	#[Assert\GreaterThanOrEqual("today", message: "The provided date ('{{ value }}') must not be before today.")]
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $date = null;
 

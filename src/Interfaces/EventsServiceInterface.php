@@ -7,7 +7,7 @@ interface EventsServiceInterface
 	/**
 	 * Returns an array of metric-related measurements relative to the given value.
 	 * @param float|int $value Value in Km
-	 * @param int|null $roundedAt How many digits in the results after the comma.
+	 * @param int|null $roundedAt How much digits in the results after the comma.
 	 * @return array{
 	 *     metric: array{
 	 *     		km: float,

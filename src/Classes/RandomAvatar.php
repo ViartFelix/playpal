@@ -94,6 +94,7 @@ class RandomAvatar
 			(string) $this->chosenStyle,
 			(string) $this->chosenReturnType
 		];
+
 		$finalUrl .= implode("/", $urlPathBits);
 
 		//add get bits
@@ -102,11 +103,17 @@ class RandomAvatar
 			"size" => 1000
 		];
 
-		$finalUrl .= "?";
-
+		$index = 0;
 		foreach ($getParams as $paramKey => $paramValue) {
-			$finalUrl .= $this->addCharacterIfNeeded($finalUrl, "&")
+			//prevent an "&" being added after the "?" in the url params
+			$characterAdded = $index === 0
+				? "?"
+				: "&";
+
+			$finalUrl = $this->addCharacterIfNeeded($finalUrl, $characterAdded)
 				. $paramKey . "=" . $paramValue;
+
+			$index++;
 		}
 
 		return $finalUrl;

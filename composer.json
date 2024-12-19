@@ -28,6 +28,7 @@
         "beberlei/doctrineextensions": "^1.5",
         "doctrine/doctrine-fixtures-bundle": "^3.7",
         "fakerphp/faker": "^1.24",
+        "spatie/symfony-ignition-bundle": "^1.1",
         "symfony/maker-bundle": "^1.61",
         "symfony/stopwatch": "7.1.*",
         "symfony/web-profiler-bundle": "7.1.*"

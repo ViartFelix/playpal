@@ -78,9 +78,9 @@ class EventController extends AbstractController
     }
 
 	/**
-	 * Route to a new event
-	 * @return void
-	 * @throws ORMException
+	 * Route and form for a new event
+	 * @param Request $request
+	 * @return Response
 	 */
 	#[Route("/new", name: "new")]
 	public function newEvent(Request $request): Response
@@ -94,29 +94,15 @@ class EventController extends AbstractController
 			/** @var Event $formEvent */
 			$formEvent = $form->getData();
 
-			$now = (new \DateTimeImmutable())->setTime(0,0,0,0);
-			$formDate = $formEvent->getDate()->setTime(0,0,0,0);
+			$this->entityManager->persist($formEvent);
+			$this->entityManager->flush();
 
-			//if event's date before today
-			if($now > $formDate) {
-				$form->get("date")->addError(
-					new FormError("The date must not be before today.")
-				);
+			$this->addFlash("success", sprintf(
+				"The event '%s' has been created for the date %s",
+				$formEvent->getName(), $formEvent->getDate()->format('d/m/Y')
+			));
 
-				//re-render the form with the errors
-				return $this->renderNewEventForm($form);
-			} else {
-				//else the event is valid
-				$this->entityManager->persist($formEvent);
-				$this->entityManager->flush();
-
-				$this->addFlash("success", sprintf(
-					"The event '%s' has been created for the date %s",
-					$formEvent->getName(), $formEvent->getDate()->format('d/m/Y')
-				));
-
-				return $this->redirectToRoute("events.single", ["id" => $event->getId()]);
-			}
+			return $this->redirectToRoute("events.single", ["id" => $event->getId()]);
 		}
 
 		return $this->renderNewEventForm($form);
@@ -151,6 +137,7 @@ class EventController extends AbstractController
 		$givenLatitude = (float) $requestLatitude;
 		$givenLongitude = (float) $requestLongitude;
 
+		//and we calculate the distance in km
 		$distance = $eventsService->calculateDistance(
 			$event->getLatitude(),
 			$event->getLongitude(),

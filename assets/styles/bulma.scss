@@ -34,3 +34,7 @@
 .table.is-hoverable tbody tr:hover * {
 	color: $background;
 }
+
+.is-addable-card {
+	border: 1px dashed $red;
+}

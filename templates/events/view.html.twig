@@ -3,6 +3,8 @@
 {% set title = event.name|default(null) %}
 {% set subtitle = "Planned the " ~ event.date|date("d/m/Y") %}
 
+{% from "common/add-person-card.macro.html.twig" import render_add_person_card %}
+
 {% block js %}
 	{{ encore_entry_script_tags('events-new') }}
 {% endblock %}
@@ -22,41 +24,46 @@
 				<div class="fixed-grid has-3-cols">
 					<div class="grid">
 						{% for participant in participants %}
-							<div class="cell card is-overflow-hidden">
-								<div class="card-image">
-									<figure class="image">
-										<object
-											class="is-fullwidth image"
-											data="{{ random_icon(participant.email) }}"
-											type="image/png"
-										>
-											<!-- Fallback -->
-											<img
-												src="{{ asset('img/default-profile.png') }}"
-												alt="Image of {{ participant.name }}"
-												data-icon-on-error="mdi:error"
-											/>
-										</object>
-									</figure>
-								</div>
-								<div class="card-header">
-									<p class="card-header-title">{{ participant.name }}</p>
-								</div>
-								<div class="card-content">
-									<a class="link" href="mailto:{{ participant.email }}">
-										<iconify-icon icon="mdi:email" class="icon"></iconify-icon>
-										{{ participant.email }}
-									</a>
+							<div class="cell is-overflow-hidden">
+								<div class="card is-overflow-hidden">
+									<div class="card-image">
+										<figure class="image">
+											<object
+												class="is-fullwidth image"
+												data="{{ random_icon(participant.email) }}"
+												type="image/png"
+											>
+												<!-- Fallback -->
+												<img
+													src="{{ asset('img/default-profile.png') }}"
+													alt="Image of {{ participant.name }}"
+													data-icon-on-error="mdi:error"
+												/>
+											</object>
+										</figure>
+									</div>
+									<div class="card-header">
+										<p class="card-header-title">{{ participant.name }}</p>
+									</div>
+									<div class="card-content">
+										<a class="link" href="mailto:{{ participant.email }}">
+											<iconify-icon icon="mdi:email" class="icon"></iconify-icon>
+											{{ participant.email }}
+										</a>
+									</div>
 								</div>
 							</div>
 						{% endfor %}
+
+						<!-- container -->
+						<div class="cell is-overflow-hidden">
+							{{ render_add_person_card(
+								path('participants.add', {id: event.id})
+							) }}
+						</div>
 					</div>
 				</div>
 			{% endif %}
 		</div>
 	</section>
-
-	<hr>
-
-	<h2><a href="{{ path('participants.add', {id: event.id}) }}">Add a participant</a></h2>
 {% endblock %}

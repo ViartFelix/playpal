@@ -178,6 +178,9 @@ class EventsService implements EventsServiceInterface
 	}
 
 
+	/**
+	 * @inheritDoc
+	 */
 	public function getMetricConversions(int|float $value, ?int $roundedAt = null): array
 	{
 		//convert the value; it'll be simpler later

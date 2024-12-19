@@ -1,0 +1,24 @@
+{% macro render_add_person_card(href) %}
+	<div class="card is-overflow-hidden">
+		<div class="card-image">
+			<figure class="image has-background-primary">
+				<img
+					src="/img/add-account.png"
+					alt="Placeholder image"
+				/>
+			</figure>
+		</div>
+
+		<header class="card-header">
+			<p class="card-header-title">Participant name</p>
+		</header>
+
+
+		<footer class="card-footer">
+			<a href="{{ href }}" class="card-footer-item">
+				<iconify-icon class="icon" icon="mdi:add-circle"></iconify-icon>
+				Add a participant
+			</a>
+		</footer>
+	</div>
+{% endmacro %}
