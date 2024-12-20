@@ -22,6 +22,7 @@
     "dependencies": {
         "@iconify-json/codicon": "^1.2.5",
         "@iconify/utils": "^2.2.0",
+        "axios": "^1.7.9",
         "bulma": "^1.0.2",
         "iconify-icon": "^2.1.0"
     }

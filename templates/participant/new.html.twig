@@ -7,7 +7,8 @@
 	<script>
 		window.eventData = {
 			latitude: {{ event.latitude }},
-			longitude: {{ event.longitude }}
+			longitude: {{ event.longitude }},
+			id: {{ event.id }}
 		}
 	</script>
 
@@ -136,8 +137,12 @@
 				</div>
 			</div>
 
-			<div id="lat-lon-result">
-				Hello i'm a killer fish
+			<div id="lat-lon-result" class="is-hidden mb-5">
+				You are at
+				<span id="calculated-distance" class="has-text-weight-bold"></span>
+				<span class="is-capitalized has-text-weight-bold" id="distance-unit"></span>
+				(<span class="is-italic" id="distance-unit-clean"></span>)
+				for the event
 			</div>
 
 			<div class="field is-grouped is-grouped-centered">

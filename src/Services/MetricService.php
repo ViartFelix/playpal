@@ -189,7 +189,7 @@ class MetricService implements MetricServiceConstants, Roundable
 		return [
 			"unit" => [
 				"short" => $shortUnit,
-				"full" => $longUnit,
+				"long" => $longUnit,
 			],
 			"value" => $distanceValue,
 			//sentences on the result

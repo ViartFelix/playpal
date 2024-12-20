@@ -67,7 +67,7 @@ class RandomAvatar
 	 */
 	private function checkRequirements(?string $style = null, ?string $returnType = null): RandomAvatar
 	{
-		if(!is_null($style) && !array_key_exists($style, $this->allStyles)) {
+		if(!is_null($style) && !in_array($style, $this->allStyles)) {
 			throw new \RuntimeException("The style '" . $style . "' does not exist or is not supported.");
 		}
 
@@ -151,11 +151,6 @@ class RandomAvatar
 		return $this->allStyles[$randomIndex];
 	}
 
-	private function trimUrl(string $url)
-	{
-
-	}
-
 	/* ------------------------------------------------------------------------- */
 
 	public function getSeed(): string
@@ -190,6 +185,11 @@ class RandomAvatar
 		$this->checkRequirements(null, $chosenReturnType);
 
 		$this->chosenReturnType = $chosenReturnType;
+	}
+
+	public function getAllStyles(): array
+	{
+		return $this->allStyles;
 	}
 
 

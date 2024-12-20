@@ -9,7 +9,7 @@
 	$blue: $blue,
 	$danger: $pure-red,
 	$warning: $yellow,
-	$white: $background,
+	$white: $white,
 
 	// ------------------ navbar ------------------
 	$navbar-background-color: $dark,
@@ -21,7 +21,7 @@
 
 	// ------------------ tables ------------------
 	$table-head-background-color: $dark,
-	$table-body-background-color: $background,
+	$table-body-background-color: $white,
 	$table-row-hover-background-color: $red,
 	$table-striped-row-even-hover-background-color: $red,
 
@@ -29,13 +29,12 @@
 	$modal-background-background-color: rgba($dark, 75%),
 	$modal-z: 999,
 
-
 	// ------------------ other ------------------
 	$body-background-color: $yellow,
 );
 
 .table.is-hoverable tbody tr:hover * {
-	color: $background;
+	color: $white;
 }
 
 .is-addable-card {
