@@ -19,3 +19,16 @@ html, body {
 	position: relative;
 }
 
+.has-main-hero-bg {
+	position: relative;
+
+	&::before {
+		content: "";
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		opacity: 0.3;
+		filter: blur(5.5px);
+		background: url("../static/homepage-bg.png") repeat;
+	}
+}

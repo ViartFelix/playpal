@@ -3,7 +3,7 @@
 	{% set rendered_subitle = subtitle|default(null) %}
 
 	{% if rendered_title is not empty or rendered_subitle is not empty %}
-		<section class="hero is-primary is-medium">
+		<section class="hero is-primary is-medium has-main-hero-bg is-overflow-hidden">
 			<div class="hero-body">
 				<div class="container">
 					{% if title is not empty %}

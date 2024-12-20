@@ -1,5 +1,24 @@
 {% extends "base.html.twig" %}
 
+{% set availableIcons = ["mdi:football", "mdi:soccer", "mdi:basketball", "mdi:golf", "mdi:chess-bishop", "mdi:car-sports",
+"mdi:baseball", "mdi:eight-ball", "mdi:tennis-ball", "mdi:volleyball", "mdi:ski", "mdi:ski-cross-country", "mdi:bow-arrow"] %}
+
 {% block body %}
-    <h1>Hello, I'm the homepage</h1>
+	<section class="hero is-large is-danger is-overflow-hidden has-main-hero-bg">
+		<div class="hero-body container fixed-grid has-2-cols">
+			<div class="grid">
+				<div class="cell is-flex is-align-items-end is-justify-content-center is-flex-direction-column">
+					<p class="title">Playpal</p>
+					<p class="subtitle">Events. Sports. Together.</p>
+					<a href="{{ path('events.all') }}" class="button is-medium">
+						<iconify-icon class="icon is-small mr-1" icon="mdi:format-list-numbered"></iconify-icon>
+						Browse events
+					</a>
+				</div>
+
+				{# Random icon #}
+				<iconify-icon class="cell is-block iconify p-3" width="100%" height="200px" icon="{{ random(availableIcons) }}"></iconify-icon>
+			</div>
+		</div>
+	</section>
 {% endblock %}
