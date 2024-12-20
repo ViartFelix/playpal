@@ -78,8 +78,8 @@ const allEntries = {
 		"./assets/app.js",
 		"./assets/styles/common.scss"
 	],
-	"events-new": [
-		"./assets/pages/events/new.js"
+	"participant-new": [
+		"./assets/pages/participant/new.js"
 	]
 }
 

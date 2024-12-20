@@ -3,6 +3,17 @@
 {% set title = "Add a participant" %}
 {% set subtitle = "Event '" ~ event.name ~ "'" %}
 
+{% block js %}
+	<script>
+		window.eventData = {
+			latitude: {{ event.latitude }},
+			longitude: {{ event.longitude }}
+		}
+	</script>
+
+	{{ encore_entry_script_tags('participant-new') }}
+{% endblock %}
+
 {% block body %}
 	<section class="section">
 		<div class="container">
@@ -67,6 +78,17 @@
 					</div>
 				</div>
 
+				<hr />
+
+				<section class="section is-display-flex is-justify-content-center is-flex-direction-column">
+					<h1 class="title has-text-centered">Additional data</h1>
+					<button type="button" class="button" id="open-coordinates-modal">
+						Open
+					</button>
+				</section>
+
+				<hr />
+
 				<div class="field is-grouped is-grouped-centered">
 					<div class="control">
 						<button class="button is-dark" type="submit">
@@ -85,12 +107,49 @@
 		</div>
 	</section>
 
-	{#
-	{{ form_start(form) }}
-		{{ form_row(form.name) }}
-		{{ form_row(form.email) }}
-		{{ form_row(form.event) }}
-	{{ form_end(form) }}
-	#}
+	<!-- modals -->
+	<div class="modal" id="target-modal-coordinates">
+		<div class="modal-background"></div>
 
+		<div class="modal-content box">
+			<div class="columns">
+				<div class="column">
+					<div class="field">
+						<label class="label" for="latitude-input">
+							Latitude
+						</label>
+						<div class="control">
+							<input placeholder="54.5651421" class="input" id="latitude-input"/>
+						</div>
+					</div>
+				</div>
+
+				<div class="column">
+					<div class="field">
+						<label class="label" for="longitude-input">
+							Longitude
+						</label>
+						<div class="control">
+							<input placeholder="31.5831174" class="input" id="longitude-input"/>
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<div id="lat-lon-result">
+				Hello i'm a killer fish
+			</div>
+
+			<div class="field is-grouped is-grouped-centered">
+				<div class="control">
+					<button class="button is-dark" id="submit-calculate-distance" type="button">
+						<iconify-icon class="icon mr-1" icon="mdi:location-favorite"></iconify-icon>
+						Calculate
+					</button>
+				</div>
+			</div>
+		</div>
+
+		<button class="modal-close is-large" aria-label="close"></button>
+	</div>
 {% endblock %}
