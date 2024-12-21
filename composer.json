@@ -1,7 +1,7 @@
 {
     "type": "project",
     "name": "viart-felix/playpal",
-    "version": "0.3.7",
+    "version": "0.3.8",
     "license": "proprietary",
     "minimum-stability": "stable",
 	"authors": [

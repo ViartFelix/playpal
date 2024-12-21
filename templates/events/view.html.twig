@@ -1,22 +1,20 @@
 {% extends "base.html.twig" %}
 
+{% from "common/add-person-card.macro.html.twig" import render_add_person_card %}
+{% from "common/event-details.macro.html.twig" import render_events_infos %}
+
 {% set title = event.name|default(null) %}
 {% set subtitle = "Planned the " ~ event.date|date("d/m/Y") %}
-
-{% from "common/add-person-card.macro.html.twig" import render_add_person_card %}
 
 {% block body %}
 	<section class="section">
 		<div class="container">
-			<h2 class="subtitle has-text-centered">
-				{% if participants is not empty %}
-					{{ participants|length }} participants.
-				{% else %}
-					No participants.
-				{% endif %}
-			</h2>
 
-			<div class="fixed-grid has-3-cols">
+			<!-- Infos on the event -->
+			{{ render_events_infos(event) }}
+
+			<!-- Participants -->
+			<section class="fixed-grid has-3-cols">
 				<div class="grid">
 					{% for participant in participants %}
 						<div class="cell is-overflow-hidden">
@@ -57,7 +55,7 @@
 						) }}
 					</div>
 				</div>
-			</div>
+			</section>
 		</div>
 	</section>
 {% endblock %}

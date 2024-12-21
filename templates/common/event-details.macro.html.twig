@@ -1,0 +1,34 @@
+{% macro render_events_infos(event) %}
+	{% set participants = event.participants %}
+
+	<section class="box">
+		<h3 class="subtitle has-text-centered">Informations on this event</h3>
+
+		<div class="grid">
+			<div class="cell has-text-centered">
+				<b>Participants</b>
+				<p>
+					{% if participants is not empty %}
+						{{ participants|length }} participant{{ participants|length > 1 ? "s" : "" }}
+					{% else %}
+						No participants.
+					{% endif %}
+				</p>
+			</div>
+
+			{% if event.latitude|default(null) is not empty %}
+				<div class="cell has-text-centered">
+					<b>Latitude</b>
+					<p>{{ event.latitude }}</p>
+				</div>
+			{% endif %}
+
+			{% if event.longitude|default(null) is not empty %}
+				<div class="cell has-text-centered">
+					<b>Longitude</b>
+					<p>{{ event.longitude }}</p>
+				</div>
+			{% endif %}
+		</div>
+	</section>
+{% endmacro %}
