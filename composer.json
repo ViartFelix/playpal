@@ -1,9 +1,15 @@
 {
     "type": "project",
     "name": "viart-felix/playpal",
-    "version": "0.3.6",
+    "version": "0.3.7",
     "license": "proprietary",
     "minimum-stability": "stable",
+	"authors": [
+		{
+			"name": "VIART Félix",
+			"email": "viart.felix@gmail.com"
+		}
+	],
     "prefer-stable": true,
     "require": {
         "php": ">=8.2",
